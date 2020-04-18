@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appletart</title>
+</head>
+<body>
+
+  <h1 data-bind="content">
+    Something
+  </h1>
+  
+  <ul data-bind="content" data-builder="list">
+    <li>
+      No results yet
+    </li>
+  </ul>
+
+  <input data-call="input.setContent" type="text">
+  
+  <script src="../dist/appletart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
