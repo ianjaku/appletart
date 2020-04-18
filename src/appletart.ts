@@ -11,7 +11,7 @@ export interface BindMap {
   [prop: string]: HTMLElement[]
 }
 
-export function store<State>(server: Server<State>, scope: string | null = null) {
+export function Store<State>(server: Server<State>, scope: string | null = null) {
   let scopeEls: any
   if (scope == null) {
     document.querySelectorAll
@@ -24,7 +24,7 @@ export function store<State>(server: Server<State>, scope: string | null = null)
   
   const reactiveState = makeReactive(server.state, server.builders, bindMap)
   makeCallListeners(reactiveState, server.actions, scopeEls)
-  return reactiveState
+  return { state: reactiveState }
 }
 
 function makeReactive<State>(state: State, builders: builders<State>, bindMap: BindMap) {
@@ -130,4 +130,4 @@ function setValueOfHTMLElement<State>(
   el.innerHTML = value
 }
 
-export default { store }
+export default { Store }

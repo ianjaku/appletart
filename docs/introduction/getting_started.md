@@ -3,6 +3,40 @@ category: "Introduction"
 title: "Getting started"
 ---
 
+# What are we building?
+
+Try typing your name in the input below to see what we're working on.
+
+<div id="example">
+  <h2 data-bind="name" data-builder="welcome"></h2>
+  <input
+    data-action="input.setName"
+    type="text"
+    placeholder="Type here"
+    style="width: 100%; padding: 10px 25px; border-radius: 4px"
+  >
+</div>
+
+<script src="https://invacto-general.fra1.cdn.digitaloceanspaces.com/appletart/appletart.js"></script>
+<script>
+  console.log(appletart)
+  appletart.Store({
+    state: {
+      name: null
+    },
+    builders: {
+      welcome(state) {
+        return `Welcome ${state.name}!`
+      }
+    },
+    actions: {
+      setName(state, sourceEl) {
+        state.name = sourceEl.value
+      }
+    }
+  }, "#example")
+</script>
+
 # Installation
 
 There are currently 2 ways to install appletart.
@@ -29,7 +63,7 @@ You can set up a store for your search, validation, list rendering, ...
 
 A **VERY** basic store.
 ```javascript
-const state = appletart.Store({
+const { state } = appletart.Store({
   state: {
     content: null
   }
@@ -62,7 +96,7 @@ Lets create our action.
 
 In our **JS**
 ```javascript
-const state = appletart.Store({
+const { state } = appletart.Store({
   state: {
     content: null
   },
@@ -101,7 +135,7 @@ That's where Builders come in. **They transform the state to HTML** before updat
 Lets make an example:
 
 ```javascript
-const state = appletart.Store({
+const { state } = appletart.Store({
   state: {
     content: null
   },
@@ -138,7 +172,7 @@ There are two ways to get some initial state on page load.
 When initalising your store, just add a value other than **null** or **undefined**
 
 ```javascript
-const state = appletart.Store({
+const { state } = appletart.Store({
   state: {
     content: "Initial value"
   }
