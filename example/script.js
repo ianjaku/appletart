@@ -9,11 +9,9 @@ const state = appletart.store({
   builders: {
     list(state) {
       const list = state.content.replace(", ", ",").split(",")
-      let result = ""
-      list.forEach(item => {
-        result += `<li>${item}</li>`
-      });
-      return result
+      return list.reduce((acc, val) => {
+        return acc + `<li>${val}</li>`
+      }, "")
     }
   },
   actions: {

@@ -1,4 +1,4 @@
-type actions<State> = {[actionName: string]: (state: State, el: HTMLElement) => void | Promise<void>}
+type actions<State> = {[actionName: string]: (state: State, el: HTMLElement, meta: {isInit: boolean}) => void | Promise<void>}
 type builders<State> = {[builderName: string]: (state: State) => string}
 
 export interface Server<State> {
@@ -66,10 +66,10 @@ function makeCallListeners<State>(
       const actionName = tokens[1]
       if (!(actionName in actions)) return
       callEl.addEventListener(eventName, (event: Event) => {
-        actions[actionName](reactiveState, callEl)
+        actions[actionName](reactiveState, callEl, {isInit: false})
       })
       if (callEl.dataset.init != null) {
-        actions[actionName](reactiveState, callEl)
+        actions[actionName](reactiveState, callEl, {isInit: true})
       }
     })
   })
