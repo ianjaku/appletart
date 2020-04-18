@@ -1,5 +1,5 @@
-type actions<State> = {[actionName: string]: (state: State, event: any) => void | Promise<void>}
-type builders<State> = {[builderName: string]: (state: State) => string | Promise<string>}
+type actions<State> = {[actionName: string]: (state: State, el: HTMLElement) => void | Promise<void>}
+type builders<State> = {[builderName: string]: (state: State) => string}
 
 export interface Server<State> {
   state: State,
@@ -20,7 +20,7 @@ export function store<State>(server: Server<State>, scope: string | null = null)
     scopeEls = document.querySelectorAll<HTMLElement>(scope)
   }
 
-  const bindMap: BindMap = findElementsWithDataBind(scopeEls)
+  const bindMap: BindMap = findElementsWithDataBind<State>(scopeEls, server.state, server.builders)
   
   const reactiveState = makeReactive(server.state, server.builders, bindMap)
   makeCallListeners(reactiveState, server.actions, scopeEls)
@@ -39,13 +39,7 @@ function createSetHandler<State>(state: State, builders: builders<State>, bindMa
     if (prop in bindMap) {
       const boundEls = bindMap[prop]
       boundEls.forEach((el: HTMLElement) => {
-        let elNewValue = value
-        const builder = el.dataset.builder
-        if (builder != null && builder in builders) {
-          // TODO: cache builders
-          elNewValue = builders[builder](state)
-        }
-        setValueOfHTMLElement(el, elNewValue)
+        setValueOfHTMLElement(el, value, builders, el.dataset.builder, state)
       })
     }
 
@@ -72,21 +66,29 @@ function makeCallListeners<State>(
       const actionName = tokens[1]
       if (!(actionName in actions)) return
       callEl.addEventListener(eventName, (event: Event) => {
-        actions[actionName](reactiveState, event)
+        actions[actionName](reactiveState, callEl)
       })
+      if (callEl.dataset.init != null) {
+        actions[actionName](reactiveState, callEl)
+      }
     })
   })
 }
 
-function findElementsWithDataBind(scopeEls: NodeListOf<HTMLElement>) {
+function findElementsWithDataBind<State>(scopeEls: NodeListOf<HTMLElement>, initialState: State, builders: builders<State>) {
   let bindMap: BindMap = {}
   scopeEls.forEach((el: HTMLElement) => {
-    bindMap = findElementsWithDataBindInScopeEl(el, bindMap)
+    bindMap = findElementsWithDataBindInScopeEl<State>(el, bindMap, initialState, builders)
   })
   return bindMap
 }
 
-function findElementsWithDataBindInScopeEl(scopeEl: HTMLElement, bindMap: BindMap) {
+function findElementsWithDataBindInScopeEl<State>(
+  scopeEl: HTMLElement,
+  bindMap: BindMap,
+  initialState: State,
+  builders: builders<State>
+) {
   const els = scopeEl.querySelectorAll<HTMLElement>("[data-bind]")
   els.forEach((boundEl: HTMLElement) => {
     const bindProp = boundEl.dataset.bind
@@ -96,12 +98,33 @@ function findElementsWithDataBindInScopeEl(scopeEl: HTMLElement, bindMap: BindMa
       } else {
         bindMap[bindProp].push(boundEl)
       }
+      // Set initial state
+      if (
+        typeof bindProp === "string" &&
+        typeof initialState === "object"
+      ) {
+        const s: any = initialState
+        const val = s[bindProp]
+        if (val != null) {
+          setValueOfHTMLElement(boundEl, val, builders, boundEl.dataset.builder, initialState)
+        }
+      }
     }
   })
   return bindMap
 }
 
-function setValueOfHTMLElement(el: HTMLElement, value: string) {
+function setValueOfHTMLElement<State>(
+  el: HTMLElement,
+  value: string,
+  builders?: builders<State>,
+  builder?: string,
+  state?: State
+) {
+  if (builder != null && builders != null && state != null && builder in builders) {
+    // TODO: cache builders
+    value = builders[builder](state)
+  }
   // TODO: use value or appendChild depending on the type of el & value. 
   // value can also be a node or nodelist
   el.innerHTML = value

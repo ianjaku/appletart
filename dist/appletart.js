@@ -116,7 +116,7 @@ function store(server, scope) {
     else {
         scopeEls = document.querySelectorAll(scope);
     }
-    var bindMap = findElementsWithDataBind(scopeEls);
+    var bindMap = findElementsWithDataBind(scopeEls, server.state, server.builders);
     var reactiveState = makeReactive(server.state, server.builders, bindMap);
     makeCallListeners(reactiveState, server.actions, scopeEls);
     return reactiveState;
@@ -132,13 +132,7 @@ function createSetHandler(state, builders, bindMap) {
         if (prop in bindMap) {
             var boundEls = bindMap[prop];
             boundEls.forEach(function (el) {
-                var elNewValue = value;
-                var builder = el.dataset.builder;
-                if (builder != null && builder in builders) {
-                    // TODO: cache builders
-                    elNewValue = builders[builder](state);
-                }
-                setValueOfHTMLElement(el, elNewValue);
+                setValueOfHTMLElement(el, value, builders, el.dataset.builder, state);
             });
         }
         return true;
@@ -161,19 +155,22 @@ function makeCallListeners(reactiveState, actions, scopedEls) {
             if (!(actionName in actions))
                 return;
             callEl.addEventListener(eventName, function (event) {
-                actions[actionName](reactiveState, event);
+                actions[actionName](reactiveState, callEl);
             });
+            if (callEl.dataset.init != null) {
+                actions[actionName](reactiveState, callEl);
+            }
         });
     });
 }
-function findElementsWithDataBind(scopeEls) {
+function findElementsWithDataBind(scopeEls, initialState, builders) {
     var bindMap = {};
     scopeEls.forEach(function (el) {
-        bindMap = findElementsWithDataBindInScopeEl(el, bindMap);
+        bindMap = findElementsWithDataBindInScopeEl(el, bindMap, initialState, builders);
     });
     return bindMap;
 }
-function findElementsWithDataBindInScopeEl(scopeEl, bindMap) {
+function findElementsWithDataBindInScopeEl(scopeEl, bindMap, initialState, builders) {
     var els = scopeEl.querySelectorAll("[data-bind]");
     els.forEach(function (boundEl) {
         var bindProp = boundEl.dataset.bind;
@@ -184,11 +181,24 @@ function findElementsWithDataBindInScopeEl(scopeEl, bindMap) {
             else {
                 bindMap[bindProp].push(boundEl);
             }
+            // Set initial state
+            if (typeof bindProp === "string" &&
+                typeof initialState === "object") {
+                var s = initialState;
+                var val = s[bindProp];
+                if (val != null) {
+                    setValueOfHTMLElement(boundEl, val, builders, boundEl.dataset.builder, initialState);
+                }
+            }
         }
     });
     return bindMap;
 }
-function setValueOfHTMLElement(el, value) {
+function setValueOfHTMLElement(el, value, builders, builder, state) {
+    if (builder != null && builders != null && state != null && builder in builders) {
+        // TODO: cache builders
+        value = builders[builder](state);
+    }
     // TODO: use value or appendChild depending on the type of el & value. 
     // value can also be a node or nodelist
     el.innerHTML = value;

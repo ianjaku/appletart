@@ -1,8 +1,10 @@
 
 const state = appletart.store({
   state: {
-    content: "one",
-    searchResults: []
+    content: "dos, tres",
+    searchResults: [
+      "dos", "tres"
+    ]
   },
   builders: {
     list(state) {
@@ -15,10 +17,8 @@ const state = appletart.store({
     }
   },
   actions: {
-    setContent(state, event) {
-      state.content = event.target.value
+    setContent(state, el) {
+      state.content = el.value
     }
   }
 })
-
-state.searchResults = ["One", "Twos"]
