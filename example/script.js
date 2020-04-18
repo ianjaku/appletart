@@ -1,10 +1,7 @@
 
 const state = appletart.store({
   state: {
-    content: "dos, tres",
-    searchResults: [
-      "dos", "tres"
-    ]
+    content: "dos, tres"
   },
   builders: {
     list(state) {

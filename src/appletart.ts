@@ -53,13 +53,13 @@ function makeCallListeners<State>(
   scopedEls: NodeListOf<HTMLElement>
 ) {
   scopedEls.forEach((el: HTMLElement) => {
-    const els = el.querySelectorAll<HTMLElement>("[data-call]")
+    const els = el.querySelectorAll<HTMLElement>("[data-action]")
     els.forEach((callEl: HTMLElement) => {
-      const data = callEl.dataset.call
+      const data = callEl.dataset.action
       if (data == null) return
       const tokens: string[] = data.split(".")
       if (tokens.length != 2) {
-        console.error(`data-call should always have 2 parameters separated by a "." example: data-call="input.someAction"`)
+        console.error(`data-action should always have 2 parameters separated by a "." example: data-action="input.someAction"`)
         return
       }
       const eventName = tokens[0]
