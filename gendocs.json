@@ -1,0 +1,8 @@
+{
+	"name": "appletart",
+	"pages": [
+		"introduction/welcome",
+		"introduction/getting_started"
+	],
+	"sourcePath": "./docs"
+}
