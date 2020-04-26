@@ -50,7 +50,9 @@ class ChangeHandler<State> {
       if (builderName != null) {
         const builder = this.builders[builderName]
         if (builder != null) {
-          newElValue = builder(this.state)
+          builder(this.state, el)
+          return
+          // newElValue = builder(this.state)
         }
       }
       // if (el.tagName.toUpperCase() === 'INPUT') {

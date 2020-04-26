@@ -3,7 +3,7 @@ import reactivityHandler from "./reactivityHandler"
 import DOMHandler from "./DOMHandler"
 
 export type actions<State> = {[actionName: string]: (state: State, event: Event) => void | Promise<void>}
-export type builders<State> = {[builderName: string]: (state: State) => string}
+export type builders<State> = {[builderName: string]: (state: State, element: HTMLElement) => any}
 
 export interface StoreParams<State> {
   state: State,

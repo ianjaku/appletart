@@ -26,6 +26,6 @@ module.exports = {
     extensions: ['.js', '.ts', '.tsx'],
     modules: [path.resolve(__dirname, 'src')],
   },
-  mode: 'development',
-  devtool: 'sourceMap',
+  // mode: 'development',
+  // devtool: 'sourceMap',
 };
