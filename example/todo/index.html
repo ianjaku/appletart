@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo</title>
+</head>
+<body>
+
+  <form onsubmit="return false">
+    <input
+      data-action
+      data-on-input="setInputValue"
+      data-bind="inputValue"
+      type="text"
+    />
+    <button
+      type="submit"
+      data-action
+      data-on-click="createTodo"
+    >Add</button>
+  </form>
+
+  <h1 data-bind="todos.length" data-builder="title">
+    TODOS
+  </h1>
+
+  <ul data-bind="todos" data-builder="todoList"></ul>
+
+  <script src="../../dist/appletart.js"></script>
+  <script src="todo.js"></script>
+  
+</body>
+</html>

@@ -1,11 +1,11 @@
 {
   "name": "appletart",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "dist/appletart.js",
   "scripts": {
     "dev": "webpack --watch --mode development",
-    "build": "webpack"
+    "build": "webpack --mode production"
   },
   "author": "",
   "license": "ISC",

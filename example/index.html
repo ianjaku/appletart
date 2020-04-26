@@ -7,19 +7,22 @@
 </head>
 <body>
 
-  <h1 data-bind="content">
+  <h1 id="test" data-bind="content" data-builder="title">
     Something
   </h1>
   
-  <ul data-bind="content" data-builder="list">
+  <!-- <ul data-bind="content" data-builder="list">
     <li>
       No results yet
     </li>
-  </ul>
+  </ul> -->
 
-  <input data-action="input.setContent" value="uno, dos" data-init type="text">
+  <input
+    data-action
+    data-on-input="setContent"
+    type="text">
   
-  <script src="../dist/appletart.js"></script>
+  <script src="../dist/appletart.js"></script> -->
   <!-- <script src="https://invacto-general.fra1.cdn.digitaloceanspaces.com/appletart.js"></script> -->
   <script src="script.js"></script>
 </body>

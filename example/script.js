@@ -1,19 +1,37 @@
 
-const state = appletart.store({
+console.log(appletart)
+
+const store = new appletart.Store({
   state: {
-    content: "dos, tres"
+    content: null,
+    data: {
+      sub: null,
+      list: []
+    }
   },
   builders: {
-    list(state) {
-      const list = state.content.replace(", ", ",").split(",")
-      return list.reduce((acc, val) => {
-        return acc + `<li>${val}</li>`
-      }, "")
+    addWelcome(state) {
+      return `Welcome ${state}`
     }
   },
   actions: {
-    setContent(state, el) {
-      state.content = el.value
+    setContent(state, event) {
+      state.content = event.target.value
     }
   }
 })
+
+// store.state.content = "test"
+// console.log(store.state.content)
+// const state = store.state
+
+// state.data.sub = "test"
+// state.data.sub = "test2"
+// state.data.list.push("test")
+// state.content = "test"
+
+// store.state.content = "Yus!"
+
+// store.state.data.sub = "Wow!"
+// console.log(store.state)
+// store.state.data.sub = "test"
