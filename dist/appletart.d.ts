@@ -1,6 +1,9 @@
-import TheStore from "./Store";
+export declare const createStore: typeof import("./store").createStore;
+export declare const listen: typeof import("./store").addListener;
+export declare const createController: typeof import("./controller").createController;
 declare const _default: {
-    Store: typeof TheStore;
+    createStore: typeof import("./store").createStore;
+    listen: typeof import("./store").addListener;
+    createController: typeof import("./controller").createController;
 };
 export default _default;
-export declare const Store: typeof TheStore;

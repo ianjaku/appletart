@@ -7,9 +7,29 @@
 </head>
 <body>
 
-  <h1 id="test" data-bind="content" data-builder="title">
+  <!-- <h1
+    id="test"
+    class="myEl"
+    data-name="myEl"
+  >
     Something
   </h1>
+
+  <h1 class="myEl" data-name="myEl"> -->
+    
+  <!-- </h1> -->
+    <!-- data-name="someName" -->
+    <!-- data-bind="content"
+    data-builder="title" -->
+
+
+    <!-- data-bind="content"
+    data-builder="title" -->
+
+  <!-- <input
+    data-action
+    data-on-input="setContent"
+    type="text"> -->
   
   <!-- <ul data-bind="content" data-builder="list">
     <li>
@@ -17,13 +37,51 @@
     </li>
   </ul> -->
 
-  <input
-    data-action
-    data-on-input="setContent"
-    type="text">
+  <!-- <h1
+    id="test"
+    data-watch:content="renderTitle"
+  >
+    Something
+  </h1>
+
+  <input data-name="textbox" >
+
+  <h1 data-name="title">Title</h1>
+
+  <ul
+    id="ulu"
+    data-bind:query="ulBuilder"
+  ></ul>
+
+  <script>
+    let result = ""
+    for (let i = 0; i < 10000; i ++) {
+      result += `<li>Result: ${i}</li>`
+    }
+    
+    // const doc = document.getElementById("test")
+    console.time()
+    // console.log(doc.dataset)
+    const els = document.querySelectorAll("body *")
+    console.timeEnd()
+    console.log("Els:", els)
+  </script> -->
   
-  <script src="../dist/appletart.js"></script> -->
+
+
+  <div data-controller="search">
+
+    <input type="text" data-item data-on:input="updateResults">
+
+    <ul class="results" data-item="results">
+    </ul>
+
+  </div>
+
+
+  
   <!-- <script src="https://invacto-general.fra1.cdn.digitaloceanspaces.com/appletart.js"></script> -->
+  <script src="../dist/appletart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
