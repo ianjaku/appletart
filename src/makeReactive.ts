@@ -8,10 +8,7 @@ function makeReactive<Data extends Object>(data: Data, onChangeCallback: onChang
   return new Proxy(data, {
     set: createSetHandler(onChangeCallback, prefix),
     get: createGetHandler(onChangeCallback, prefix),
-    deleteProperty: createDeleteHandler(onChangeCallback, prefix),
-    apply: function () {
-      console.log("Apply:", arguments)
-    }
+    deleteProperty: createDeleteHandler(onChangeCallback, prefix)
   })
 }
 

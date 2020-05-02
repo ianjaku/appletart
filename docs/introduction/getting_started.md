@@ -3,43 +3,9 @@ category: "Introduction"
 title: "Getting started"
 ---
 
-<div id="example">
-
-  <h2 data-bind="name" data-builder="welcome"></h2>
-  <p>
-    Have a look at what we're building
-  </p>
-  <input
-    data-action="input.setName"
-    data-init
-    type="text"
-    value="Stranger"
-    style="width: 100%; padding: 15px 25px; border-radius: 4px; font-family: Helvetica, sans-serif; outline: none; border: 1px solid #CCC; box-shadow: none; margin-top: 10px;"
-  >
-</div>
-
-<script src="https://invacto-general.fra1.cdn.digitaloceanspaces.com/appletart/appletart.js"></script>
-<script>
-  appletart.Store({
-    state: {
-      name: "Stranger"
-    },
-    builders: {
-      welcome(state) {
-        return `Welcome ${state.name}!`
-      }
-    },
-    actions: {
-      setName(state, sourceEl) {
-        state.name = sourceEl.value
-      }
-    }
-  }, "#example")
-</script>
-
 # Installation
 
-There are currently 2 ways to install appletart.
+There are 3 ways to install appletart
 
 ## 1. NPM
 
@@ -49,147 +15,304 @@ Our package is live on NPM under the name "appletart"
 npm i appletart
 ```
 
-## 2. Raw
+## 2. CDN
 
-You can find the raw content of the library in **dist/appletart.js**
+Gendocs is also hosted on our CDN at [https://invacto-general.fra1.cdn.digitaloceanspaces.com/appletart.js](https://invacto-general.fra1.cdn.digitaloceanspaces.com/appletart.js)
+
+## 3. Raw
+
+You can find the raw content of the library on [github](https://github.com/invacto/appletart/blob/master/dist/appletart.js)
 
 Just add this code to your project and you're ready to go!
 
-# Creating your first store
+# Concepts
 
-appletart is designed so that you can make your code as modular as possible.
+There are **2** important **concepts**.
 
-You can set up a store for your search, validation, list rendering, ...
+## Controller
 
-A **VERY** basic store.
-```javascript
-const { state } = appletart.Store({
-  state: {
-    name: null
-  }
-}, "#tutorial")
-```
+The controller handles a piece of content on your site.
+You would make a controller for a searchbar, sidebar, menu, ...
 
-Now we can bind to this state in our HTML.
+The most important part of the controller is that it takes a piece of HTML and doesn't care about anything else.
+
+## Store
+
+Think of the store as **reactive global state**.
+It connects all controllers together.
+
+A big usecase for the store is a hamburger menu.
+You put the state of your hamburger menu in the store and all controllers can listen and react to it.
+
+# Usage
+
+Let's make a simple to-do application to showcase appletart.
+
+## Your first controller
+
+let's start with some simple HTML
 
 ```html
-<div id="#tutorial">
-  <h1 data-bind="name">Name</h1>
+<div data-controller="todo">
+
+  <input type="text">
+
+  <ul>
+    <li>Todo1</li>
+    <li>Todo2</li>
+    <li>Todo3</li>
+  </ul>
+
 </div>
 ```
 
-Lets now change this content!
+```js
+import appletart from 'appletart' // don't need this line when using the CDN
 
-```javascript
-state.name = "Stranger"
+appletart.createController("todo", () => {
+  // Your controller code goes here
+})
 ```
 
-You can now see the state update!
+We start by adding the **"data-controller"** attribute.
+This will make sure that this piece of html will get handled by the "todo" controller.
 
-# Actions
+```warning
+You can not nest controllers, think of controller blocks as BEM blocks.
+```
 
-We can now manipulate our DOM, but we can't react to any events.
+## Defining items
 
-That's where actions come in. **actions are eventListeners** which listen to certain pieces of your html.
+Items are HTML Elements. Every item that appletart needs to know needs the **data-item** tag.
 
-Lets create our action.
+If you want to be able to target this element later, you also have to give it a name.
+ex: **data-item="someName"**
 
-In our **JS**
-```javascript
-const { state } = appletart.Store({
-  state: {
-    anme: null
-  },
-  actions: {
-    setName(state, sourceElement) {
-      state.name = sourceElement.value
+Lets name our items.
+
+```html
+<div data-controller="todo">
+
+  <input type="text" data-item="input">
+  <button data-item>Add todo</button>
+
+  <ul data-item="todoList">
+    <li>Todo1</li>
+    <li>Todo2</li>
+    <li>Todo3</li>
+  </ul>
+
+</div>
+```
+
+We can now reach our items from inside our controller.
+The button can't be reached, but that's fine. We don't need to reach it and we can always add it later.
+
+Let's try to set the value of our input.
+
+```js
+import appletart from 'appletart' // don't need this line when using the CDN
+
+appletart.createController("todo", ({ items }) => {
+
+  items.input.value = "Some value"
+  
+})
+```
+
+## Throwing events
+
+We need to add a todo item, whenever someone presses the button.
+
+In appletart we use the **data-on:** attribute to throw a controller event when a javascript event gets thrown.
+
+So lets detect a button press.
+
+```html
+<div data-controller="todo">
+
+  <input type="text" data-item="input">
+  <button data-item data-on:click="buttonClicked">Add todo</button>
+
+  <ul data-item="todoList">
+    <li>Todo1</li>
+    <li>Todo2</li>
+    <li>Todo3</li>
+  </ul>
+
+</div>
+```
+
+```js
+import appletart from 'appletart' // don't need this line when using the CDN
+
+appletart.createController("todo", ({ items, on }) => {
+  on({
+    buttonClicked: (event, element) => addTodo()
+  })
+
+  function addTodo() {
+
+  }
+})
+```
+
+the on function takes an object with the event name as key and the event handler as value.
+Every event also receives the event and the html element of the event.
+
+This way of handling events adds some structure and makes the event flow much cleaner.
+
+Let's also get the content of the input and add a todo.
+
+```js
+import appletart from 'appletart' // don't need this line when using the CDN
+
+appletart.createController("todo", ({ items, on }) => {
+  on({
+    buttonClicked: (event, element) => addTodo()
+  })
+
+  function addTodo() {
+    // Get the text from the input field
+    const text = items.input.value
+
+    // Create the li tag
+    const textNode = document.createTextNode(text)
+    const liNode = document.createElement("li")
+    liNode.appendChild(textNode)
+
+    // Add the liNode to the end of the todoList <ul>
+    items.todoList.appendChild(liNode)
+  }
+})
+```
+
+You can now add items to your todolist.
+
+We can't obviously just keep adding todo's to our application.
+In some rare moments, we tend to get some work done.
+That's why we need to be able to remove items from our todo.
+
+## Dynamic indexing
+
+Whenever you add nodes or remove them, appletart will look for data-item tags to index those nodes.
+
+This means that we can add a **data-on:click** attribute to our newly created liNodes to remove them again.
+
+```js
+import appletart from 'appletart' // don't need this line when using the CDN
+
+appletart.createController("todo", ({ items, on }) => {
+  on({
+    buttonClicked: (event, element) => addTodo(),
+    removeItem: (event, element) => removeItem(element)
+  })
+
+  function removeItem(item) {
+    items.todoList.removeChild(item)
+  }
+
+  function addTodo() {
+    // Get the text from the input field
+    const text = items.input.value
+
+    // Create the li tag
+    const textNode = document.createTextNode(text)
+    const liNode = document.createElement("li")
+    // Add the data-item="" and data-on:click="removeItem" attributes
+    liNode.setAttribute("data-item", "")
+    liNode.setAttribute("data-on:click", "removeItem")
+    liNode.appendChild(textNode)
+
+    // Add the liNode to the end of the todoList <ul>
+    items.todoList.appendChild(liNode)
+  }
+})
+```
+
+We can now remove items from our todo by clicking on them.
+
+## State
+
+We can also put our todo's in our global state so other controllers can use it as well.
+Maybe you have a toolbelt controller, or something simular.
+
+```warning
+State has to be defined before making your first controller!
+```
+
+```js
+import appletart from 'appletart'
+
+appletart.createStore({
+  todos: []
+})
+
+// Your controller definition goes here
+```
+
+Let's now listen to changes and render that state in our controller.
+
+```js
+import appletart from 'appletart' // don't need this line when using the CDN
+
+appletart.createController("todo", ({ state, listen, items, on }) => {
+  on({
+    buttonClicked: (event, element) => addTodo(),
+    removeItem: (event, element) => removeItem(element)
+  })
+
+  listen("todos", (newValue, oldValue) => {
+    renderTodos(newValue)
+  })
+
+  function removeItem(item) {
+    items.todoList.removeChild(item)
+  }
+
+  function addTodo() {
+    const text = items.input.value
+    state.todos.push(text)
+  }
+
+  function renderTodos(todos) {
+    const todosHTML = todos.map(t => `<li data-item data-on:click="removeItem">${t}</li>`).join("")
+    items.todoList.appendChild(todosHTML)
+  }
+})
+```
+
+And that's our todo. There is still some optimization possible but it's definitely not a bad app at all! :)
+
+```info
+You can also use the listen comand that the store returns to listen to state changes outside of your app.
+```
+
+## clickOutside
+
+One last thing, which you don't need for a todo application but is always nice is clickOutside.
+If you want to detect when the user clicks outside of your item just use the clickOutside event.
+
+Example:
+
+```html
+<div data-controller="test" data-on:clickOutside="clickedOutside">
+  <h1 data-item="title"></h1>
+</div>
+```
+
+```js
+createController("test", ({ items, on }) => {
+  on({
+    clickedOutside() {
+      items.title = "Clicked outside"
     }
-  }
-}, "#tutorial")
+  })
+})
 ```
 
-To make our event listener listen to our input, we use the **data-action** tag.
+```info
+Feel free to make an issue on the github repo if you have any doubts.
 
-In our **HTML**
-```html
-<div id="#tutorial">
-  <h1 data-bind="name">Stranger</h1>
-  <input data-action="input.setName" type="text" />
-</div>
+(https://github.com/invacto/appletart)[https://github.com/invacto/appletart]
 ```
-
-**data-action** takes the event and the action name as parameters separated by a "."
-
-In the above case we're listening to the "input" event and calling the "setContent" action whenever it's called.
-
-Now run your application and type something in the input box.
-
-
-# Builders
-
-We're now able to listen to events and update our DOM.
-But we obviously don't want to put HTML in our store, so how do we add HTML to the DOM?
-
-That's where Builders come in. **They transform the state to HTML** before updating the DOM.
-
-Lets make an example:
-
-```javascript
-const { state } = appletart.Store({
-  state: {
-    content: null
-  },
-  builders: {
-    welcome(state) {
-      return `Welcome ${state.name}!`
-    }
-  }
-  actions: {
-    setContent(state, sourceElement) {
-      state.name = sourceElement.name
-    }
-  }
-}, "#tutorial")
-```
-
-We can use this builder with the **data-builder** tag.
-
-```html
-<div id="#tutorial">
-  <h1 data-bind="name" data-builder="welcome"></h1>
-  <input data-action="input.setName" type="text" />
-</div>
-```
-
-You can now see that the h1 has an anchor tag inside of it linking to google.
-
-# Init
-
-<!-- There are two ways to get some initial state on page load. -->
-
-<!-- ## 1. Adding content to the store
-
-When initalising your store, just add a value other than **null** or **undefined**
-
-```javascript
-const { state } = appletart.Store({
-  state: {
-    name: "Initial value"
-  }
-}, "#tutorial")
-``` -->
-
-<!-- ## 2. Adding data-init next to your data-action -->
-
-If you add **data-init** to a tag that also has **data-action** then the action will be called on store initialisation.
-
-Just like the previous example:
-
-```html
-<div id="#tutorial">
-  <h1 data-bind="name" data-builder="welcome"></h1>
-  <input data-init data-action="input.setName" type="text" value="Stranger" />
-</div>
-```
-
-In the above case "setContent" will be called when the store gets initialised.
