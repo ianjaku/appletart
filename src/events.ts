@@ -25,6 +25,20 @@ function createEventHandler() {
   }
 
   function registerActionListener(eventType: string, el: HTMLElement, listenerName: string) {
+    if (eventType.toLowerCase() === "clickoutside") {
+      document.addEventListener("click", (event) => {
+        const target = event.target
+        if (target == null) return
+        // @ts-ignore
+        if (!el.contains(target)) {
+          const eventListener = _eventListeners[listenerName]
+          if (eventListener == null) return
+
+          eventListener(event, el)
+        }
+      })
+    }
+
     el.addEventListener(eventType, (event) => {
       const eventListener = _eventListeners[listenerName]
       if (eventListener == null) return

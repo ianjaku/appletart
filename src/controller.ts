@@ -21,7 +21,6 @@ export function createController<State>(name: string, controller: controller<Sta
   _controllers[name] = controller
 }
 
-
 function init() {
   const controllerElements = dom.findControllers()
 
@@ -40,6 +39,8 @@ function init() {
       acc[name] = itemEl
       return acc
     }, {})
+
+    eventHandler.registerElement(controllerEl)
 
     const observer = domObserver.createDOMObserver({
       elementAdded(el: HTMLElement) {

@@ -128,7 +128,8 @@ const { state } = appletart.createStore({
 const controller = appletart.createController("search", ({ state, listen, on, items }) => {
   on({
     updateResults: (event) => updateResults(event.target.value),
-    visitLink: (event) => visitLink(event.target.innerText)
+    visitLink: (event) => visitLink(event.target.innerText),
+    clickOutside: (event) => hide()
   })
 
   function updateResults(value) {
@@ -139,6 +140,10 @@ const controller = appletart.createController("search", ({ state, listen, on, it
 
   function visitLink(value) {
     console.log("Visiting:", value)
+  }
+
+  function hide() {
+    console.log("Hidded")
   }
 })
 
