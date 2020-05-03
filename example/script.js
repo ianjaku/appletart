@@ -134,7 +134,11 @@ const controller = appletart.createController("search", ({ state, listen, on, it
 
   function updateResults(value) {
     const newResults = searchResults(value)
-    items.results.innerHTML = newResults.map((r, i) => `<li data-item="result.${i}" data-on:click="visitLink">${r}</li>`).join("")
+    items.results.innerHTML = newResults.map((r, i) => `
+      <li data-item="result.${i}" data-on:click="visitLink">
+        ${r}
+      </li>
+    `).join("")
     console.log(items)
   }
 

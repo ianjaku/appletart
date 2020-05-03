@@ -7,7 +7,7 @@ title: "Getting started"
 
 There are 3 ways to install appletart
 
-## 1. NPM
+## NPM
 
 Our package is live on NPM under the name "appletart"
 
@@ -15,11 +15,11 @@ Our package is live on NPM under the name "appletart"
 npm i appletart
 ```
 
-## 2. CDN
+## CDN
 
 Gendocs is also hosted on our CDN at [https://invacto-general.fra1.cdn.digitaloceanspaces.com/appletart.js](https://invacto-general.fra1.cdn.digitaloceanspaces.com/appletart.js)
 
-## 3. Raw
+## Raw
 
 You can find the raw content of the library on [github](https://github.com/invacto/appletart/blob/master/dist/appletart.js)
 
@@ -67,7 +67,8 @@ let's start with some simple HTML
 ```
 
 ```js
-import appletart from 'appletart' // don't need this line when using the CDN
+// don't need this line when using the CDN
+import appletart from 'appletart'
 
 appletart.createController("todo", () => {
   // Your controller code goes here
@@ -77,7 +78,7 @@ appletart.createController("todo", () => {
 We start by adding the **"data-controller"** attribute.
 This will make sure that this piece of html will get handled by the "todo" controller.
 
-```warning
+```info
 You can not nest controllers, think of controller blocks as BEM blocks.
 ```
 
@@ -111,7 +112,8 @@ The button can't be reached, but that's fine. We don't need to reach it and we c
 Let's try to set the value of our input.
 
 ```js
-import appletart from 'appletart' // don't need this line when using the CDN
+// don't need this line when using the CDN
+import appletart from 'appletart' 
 
 appletart.createController("todo", ({ items }) => {
 
@@ -144,7 +146,8 @@ So lets detect a button press.
 ```
 
 ```js
-import appletart from 'appletart' // don't need this line when using the CDN
+// don't need this line when using the CDN
+import appletart from 'appletart'
 
 appletart.createController("todo", ({ items, on }) => {
   on({
@@ -165,7 +168,8 @@ This way of handling events adds some structure and makes the event flow much cl
 Let's also get the content of the input and add a todo.
 
 ```js
-import appletart from 'appletart' // don't need this line when using the CDN
+// don't need this line when using the CDN
+import appletart from 'appletart' 
 
 appletart.createController("todo", ({ items, on }) => {
   on({
@@ -200,7 +204,8 @@ Whenever you add nodes or remove them, appletart will look for data-item tags to
 This means that we can add a **data-on:click** attribute to our newly created liNodes to remove them again.
 
 ```js
-import appletart from 'appletart' // don't need this line when using the CDN
+// don't need this line when using the CDN
+import appletart from 'appletart' 
 
 appletart.createController("todo", ({ items, on }) => {
   on({
@@ -226,6 +231,7 @@ appletart.createController("todo", ({ items, on }) => {
 
     // Add the liNode to the end of the todoList <ul>
     items.todoList.appendChild(liNode)
+
   }
 })
 ```
@@ -237,7 +243,7 @@ We can now remove items from our todo by clicking on them.
 We can also put our todo's in our global state so other controllers can use it as well.
 Maybe you have a toolbelt controller, or something simular.
 
-```warning
+```info
 State has to be defined before making your first controller!
 ```
 
@@ -254,7 +260,8 @@ appletart.createStore({
 Let's now listen to changes and render that state in our controller.
 
 ```js
-import appletart from 'appletart' // don't need this line when using the CDN
+// don't need this line when using the CDN
+import appletart from 'appletart' 
 
 appletart.createController("todo", ({ state, listen, items, on }) => {
   on({
@@ -316,3 +323,24 @@ Feel free to make an issue on the github repo if you have any doubts.
 
 (https://github.com/invacto/appletart)[https://github.com/invacto/appletart]
 ```
+
+## Debounce
+
+The lodash debounce function has been added to the library for your convenience.
+
+Example usage:
+
+```js
+createController("tutorial", ({ on }) => {
+  on({
+    // wrap your event handler in debounce (this doesn't only work in event handlers)
+    buttonPressed: appletart.debounce((event) => updateResults(), 250)
+  })
+
+  function updateResults() {
+    // Implement the update results function
+  }
+})
+```
+
+For more information check out the [lodash docs](https://lodash.com/docs/4.17.15#debounce)
