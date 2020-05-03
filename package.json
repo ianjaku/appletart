@@ -1,6 +1,6 @@
 {
   "name": "appletart",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "main": "dist/appletart.js",
   "scripts": {

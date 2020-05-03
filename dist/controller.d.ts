@@ -9,6 +9,7 @@ declare type context<State> = {
     items: itemsMap;
     on: createEventHandlersFunction;
     listen: (path: string, callback: listenerCallback) => any;
+    controllerEl: HTMLElement;
 };
 export declare function createController<State>(name: string, controller: controller<State>): void;
 declare const _default: {
