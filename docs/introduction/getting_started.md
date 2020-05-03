@@ -238,6 +238,17 @@ appletart.createController("todo", ({ items, on }) => {
 
 We can now remove items from our todo by clicking on them.
 
+## Controller element
+
+It's possible to get the controller element itself as well.
+It gets passed as the **controllerEl** key in the controller.
+
+```js
+appletart.createController("tutorial", ({ controllerEl }) => {
+  controllerEl.innerHTML = "Controller content"
+})
+```
+
 ## State
 
 We can also put our todo's in our global state so other controllers can use it as well.

@@ -10,6 +10,7 @@ type context<State> = {
   items: itemsMap;
   on: createEventHandlersFunction;
   listen: (path: string, callback: listenerCallback) => any;
+  controllerEl: HTMLElement;
 };
 
 const _controllers: {[name: string]: controller<any>} = {}
@@ -63,7 +64,8 @@ function init() {
       state: store.getState(),
       items: itemsMap,
       on: eventHandler.createEventListeners,
-      listen: store.addListener
+      listen: store.addListener,
+      controllerEl
     })
 
     for (const itemEl of itemsList) {
