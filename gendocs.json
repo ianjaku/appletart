@@ -2,7 +2,11 @@
 	"name": "appletart",
 	"pages": [
 		"introduction/welcome",
-		"introduction/getting_started"
+		"introduction/getting_started",
+
+		"guides/plugins",
+		"guides/debounce",
+		"guides/click_outside"
 	],
 	"sourcePath": "./docs"
 }
