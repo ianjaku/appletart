@@ -2,15 +2,17 @@ import store, { listenerCallback } from './store'
 import dom from './dom'
 import events, { createEventHandlersFunction } from './events'
 import domObserver from './domObserver'
+import { plugin } from './plugins'
 
 type controller<State> = (state: context<State>) => any;
 type itemsMap = {[item: string]: HTMLElement}
-type context<State> = {
+export type context<State> = {
   state: State;
   items: itemsMap;
   on: createEventHandlersFunction;
   listen: (path: string, callback: listenerCallback) => any;
   controllerEl: HTMLElement;
+  plugin: (plugin: plugin<State>, data: any) => any;
 };
 
 const _controllers: {[name: string]: controller<any>} = {}
@@ -60,16 +62,23 @@ function init() {
     })
     observer.observe(controllerEl)
 
-    controller({
+    const context = {
       state: store.getState(),
       items: itemsMap,
       on: eventHandler.createEventListeners,
       listen: store.addListener,
-      controllerEl
-    })
+      controllerEl,
+      plugin: initPlugin
+    }
+
+    controller(context)
 
     for (const itemEl of itemsList) {
       eventHandler.registerElement(itemEl)
+    }
+
+    function initPlugin(plugin: plugin<any>, params: any) {
+      plugin(context, params)
     }
   })
   

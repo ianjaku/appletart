@@ -125,7 +125,16 @@ const { state } = appletart.createStore({
   sidebarOpen: false
 })
 
-const controller = appletart.createController("search", ({ state, listen, on, items }) => {
+function dropDown({ state, listen, on, items }, dropdownItemName) {
+}
+
+const plugin = createPlugin(({ state, listen, on, items }, params) => {
+
+})
+
+const controller = appletart.createController("search", ({ state, listen, on, items, plugin }) => {
+  plugin(plugin, item)
+  
   on({
     updateResults: (event) => updateResults(event.target.value),
     visitLink: (event) => visitLink(event.target.innerText),
