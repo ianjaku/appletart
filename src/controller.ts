@@ -3,6 +3,7 @@ import dom from './dom'
 import events, { createEventHandlersFunction } from './events'
 import domObserver from './domObserver'
 import { plugin } from './plugins'
+import makeReactive from './makeReactive'
 
 type controller<State> = (state: context<State>) => any;
 type itemsMap = {[item: string]: HTMLElement}

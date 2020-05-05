@@ -6,7 +6,8 @@
 
 		"guides/plugins",
 		"guides/debounce",
-		"guides/click_outside"
+		"guides/click_outside",
+		"guides/file_structure"
 	],
 	"sourcePath": "./docs"
 }
