@@ -35,12 +35,11 @@
 
 installPlugin({
 
-  onControllerInit() {
+  onControllerInit(controllerContext) {
 
-  },
-
-  onPluginInit() {
-
+    
+    
+    return controllerContext
   }
   
 })

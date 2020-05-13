@@ -1,4 +1,6 @@
 {
+  // "presets": ["airbnb"]
+  // "presets": ["@babel/env", "@babel/typescript"]
   "presets": ["@babel/env", "@babel/typescript"],
   "plugins": [
     "@babel/proposal-class-properties",

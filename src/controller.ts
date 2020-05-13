@@ -3,13 +3,14 @@ import events, { createEventHandlersFunction } from './events'
 import domObserver from './domObserver'
 import { extension } from './extensions'
 
-type controller<ControllerState, GlobalState> = (state: context<ControllerState, GlobalState>) => any;
+type controller<ControllerState, GlobalState> = (state: ControllerContext) => any;
 type itemsMap = {[item: string]: HTMLElement}
-export type context<ControllerState, GlobalState> = {
+
+export interface ControllerContext {
   items: itemsMap;
   on: createEventHandlersFunction;
   controllerEl: HTMLElement;
-  extend: (extension: extension<ControllerState, GlobalState>, data: any) => Promise<any>;
+  extend: (extension: extension, data: any) => Promise<any>;
 };
 
 const _controllers: {[name: string]: controller<any, any>} = {}
@@ -72,7 +73,7 @@ function init() {
       eventHandler.registerElement(itemEl)
     }
 
-    function initExtension(extension: extension<any, any>, params: any) {
+    function initExtension(extension: extension, params: any) {
       return extension(context, params)
     }
   })

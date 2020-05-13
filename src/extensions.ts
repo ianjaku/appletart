@@ -1,6 +1,6 @@
-import { context } from './controller';
+import { ControllerContext } from './controller';
 
-export type extension = (controllerContext: context, params: any) => any;
+export type extension = (controllerContext: ControllerContext, params: any) => any;
 
 function createExtension(extensionCallback: extension) {
   return extensionCallback
