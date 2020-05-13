@@ -1,7 +1,11 @@
 import { ControllerContext } from './controller';
 export interface Plugin {
-    onControllerInit(controllerContext: ControllerContext): Promise<ControllerContext>;
+    beforeControllerInit(controllerContext: ControllerContext): Promise<ControllerContext>;
 }
-export declare function installPlugin(): void;
-declare const _default: {};
+export declare function installPlugin(plugin: Plugin): void;
+export declare function getPlugins(): Plugin[];
+declare const _default: {
+    getPlugins: typeof getPlugins;
+    installPlugin: typeof installPlugin;
+};
 export default _default;
