@@ -9,28 +9,40 @@
 //   console.log(`Changed from ${oldValue} to ${newValue}`)
 // })
 
-const form = appletart.createPlugin(({ items }, { formName, onValidSubmit }) => {
+// const form = appletart.createPlugin(({ items }, { formName, onValidSubmit }) => {
   
-})
+// })
 
-appletart.createController(({ state, extend, items, on }) => {
-  extend(form, {
-    formName: 'project',
-    onValidSubmit: (project) => createProject(project)
-  })
+// appletart.createController(({ state, extend, items, on }) => {
+//   extend(form, {
+//     formName: 'project',
+//     onValidSubmit: (project) => createProject(project)
+//   })
 
-  on({
-  })
+//   on({
+//   })
 
-  function createProject(projectParams) {
+//   function createProject(projectParams) {
+
+//   }
+
+//   // const state = {
+//   //   email: ''
+//   // }
+
+//   // bind(items.input, state.email)
+// })
+
+installPlugin({
+
+  onControllerInit() {
+
+  },
+
+  onPluginInit() {
 
   }
-
-  // const state = {
-  //   email: ''
-  // }
-
-  // bind(items.input, state.email)
+  
 })
 
 

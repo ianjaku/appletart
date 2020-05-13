@@ -8,7 +8,7 @@ export declare type context<ControllerState, GlobalState> = {
     items: itemsMap;
     on: createEventHandlersFunction;
     controllerEl: HTMLElement;
-    extend: (extension: extension<ControllerState, GlobalState>, data: any) => any;
+    extend: (extension: extension<ControllerState, GlobalState>, data: any) => Promise<any>;
 };
 export declare function createController<ControllerState, GlobalState>(name: string, controller: controller<ControllerState, GlobalState>): void;
 declare const _default: {

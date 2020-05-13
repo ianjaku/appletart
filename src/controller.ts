@@ -9,7 +9,7 @@ export type context<ControllerState, GlobalState> = {
   items: itemsMap;
   on: createEventHandlersFunction;
   controllerEl: HTMLElement;
-  extend: (extension: extension<ControllerState, GlobalState>, data: any) => any;
+  extend: (extension: extension<ControllerState, GlobalState>, data: any) => Promise<any>;
 };
 
 const _controllers: {[name: string]: controller<any, any>} = {}
@@ -63,7 +63,7 @@ function init() {
       items: itemsMap,
       on: eventHandler.createEventListeners,
       controllerEl,
-      extend: initPlugin
+      extend: initExtension
     }
 
     controller(context)
@@ -72,8 +72,8 @@ function init() {
       eventHandler.registerElement(itemEl)
     }
 
-    function initPlugin(extension: extension<any, any>, params: any) {
-      extension(context, params)
+    function initExtension(extension: extension<any, any>, params: any) {
+      return extension(context, params)
     }
   })
   
