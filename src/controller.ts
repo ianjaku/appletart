@@ -1,18 +1,15 @@
-import store, { listenerCallback } from './store'
 import dom from './dom'
 import events, { createEventHandlersFunction } from './events'
 import domObserver from './domObserver'
-import { plugin } from './plugins'
-import makeReactive from './makeReactive'
+import { extension } from './extensions'
 
 type controller<ControllerState, GlobalState> = (state: context<ControllerState, GlobalState>) => any;
 type itemsMap = {[item: string]: HTMLElement}
 export type context<ControllerState, GlobalState> = {
   items: itemsMap;
   on: createEventHandlersFunction;
-  listen: (path: string, callback: listenerCallback) => any;
   controllerEl: HTMLElement;
-  extend: (plugin: plugin<ControllerState, GlobalState>, data: any) => any;
+  extend: (extension: extension<ControllerState, GlobalState>, data: any) => any;
 };
 
 const _controllers: {[name: string]: controller<any, any>} = {}
@@ -25,8 +22,6 @@ export function createController<ControllerState, GlobalState>(name: string, con
 }
 
 function init() {
-  const controllerState = makeReactive({});
-  
   const controllerElements = dom.findControllers()
 
   controllerElements.forEach(controllerEl => {
@@ -67,7 +62,6 @@ function init() {
     const context = {
       items: itemsMap,
       on: eventHandler.createEventListeners,
-      listen: store.addListener,
       controllerEl,
       extend: initPlugin
     }
@@ -78,8 +72,8 @@ function init() {
       eventHandler.registerElement(itemEl)
     }
 
-    function initPlugin(plugin: plugin<any, any>, params: any) {
-      plugin(context, params)
+    function initPlugin(extension: extension<any, any>, params: any) {
+      extension(context, params)
     }
   })
   
