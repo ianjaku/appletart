@@ -3,16 +3,18 @@ import { ControllerContext } from './controller'
 const _plugins: Plugin[] = []
 
 export interface Plugin {
-  onControllerInit(controllerContext: ControllerContext): Promise<ControllerContext>;
+  beforeControllerInit(controllerContext: ControllerContext): Promise<ControllerContext>;
 }
 
 export function installPlugin(plugin: Plugin) {
   _plugins.push(plugin)
 }
 
+export function getPlugins() {
+  return _plugins
+}
+
 export default {
-  getPlugin() {
-    return _plugins;
-  },
+  getPlugins,
   installPlugin
 }

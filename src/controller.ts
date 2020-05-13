@@ -2,6 +2,7 @@ import dom from './dom'
 import events, { createEventHandlersFunction } from './events'
 import domObserver from './domObserver'
 import { extension } from './extensions'
+import { getPlugins } from './plugins';
 
 type controller<ControllerState, GlobalState> = (state: ControllerContext) => any;
 type itemsMap = {[item: string]: HTMLElement}
@@ -25,7 +26,7 @@ export function createController<ControllerState, GlobalState>(name: string, con
 function init() {
   const controllerElements = dom.findControllers()
 
-  controllerElements.forEach(controllerEl => {
+  controllerElements.forEach(async controllerEl => {
     const controllerName = controllerEl.dataset.controller
     if (controllerName == null) return
 
@@ -60,11 +61,15 @@ function init() {
     })
     observer.observe(controllerEl)
 
-    const context = {
+    let context = {
       items: itemsMap,
       on: eventHandler.createEventListeners,
       controllerEl,
       extend: initExtension
+    }
+
+    for (const plugin of getPlugins()) {
+      context = await plugin.beforeControllerInit(context)
     }
 
     controller(context)
