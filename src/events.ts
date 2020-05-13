@@ -1,7 +1,5 @@
-
 export type createEventHandlersFunction = (listeners: {[key: string]: eventListener}) => any;
 export type eventListener = (event: Event, element: HTMLElement) => void;
-
 
 function createEventHandler() {
   const _eventListeners: {[key: string]: eventListener} = {}

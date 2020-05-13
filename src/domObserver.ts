@@ -1,4 +1,3 @@
-
 type onElementRemoved = (el: HTMLElement) => any;
 type onElementAdded = (el: HTMLElement) => any; 
 

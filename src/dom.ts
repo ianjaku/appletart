@@ -1,4 +1,3 @@
-
 type onActionCallback = (eventType: string, event: Event) => any;
 
 function runAfterDOMLoaded(callback: () => any) {
