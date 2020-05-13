@@ -45,9 +45,14 @@ function createEventHandler() {
     })
   }
 
+  function getListeners() {
+    return _eventListeners
+  }
+
   return {
     createEventListeners,
-    registerElement
+    registerElement,
+    getListeners
   }
   
 }
