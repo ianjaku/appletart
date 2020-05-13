@@ -4,7 +4,7 @@ import domObserver from './domObserver'
 import { extension } from './extensions'
 import { getPlugins } from './plugins';
 
-type controller<ControllerState, GlobalState> = (state: ControllerContext) => any;
+type controller = (context: ControllerContext) => any;
 type itemsMap = {[item: string]: HTMLElement}
 
 export interface ControllerContext {
@@ -14,9 +14,9 @@ export interface ControllerContext {
   extend: (extension: extension, data: any) => Promise<any>;
 };
 
-const _controllers: {[name: string]: controller<any, any>} = {}
+const _controllers: {[name: string]: controller} = {}
 
-export function createController<ControllerState, GlobalState>(name: string, controller: controller<ControllerState, GlobalState>) {
+export function createController(name: string, controller: controller) {
   if (_controllers[name] != null) {
     throw Error(`Controller with name ${name} was defined twice.`);
   }
