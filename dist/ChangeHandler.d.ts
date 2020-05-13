@@ -1,15 +1,12 @@
-import { StoreParams } from "./Store";
-declare class ChangeHandler<State> {
-    private state;
-    private binds;
-    private actions;
-    private builders;
-    private garbageCollector;
-    constructor(storeParams: StoreParams<State>, targetElements: HTMLElement[]);
-    setState(state: State): void;
-    registerChange(bind: string, newValue: string): void;
-    registerBind(bind: string, el: HTMLElement): void;
-    callAction(action: string, event: Event): void;
-    getState(): State;
+export declare type ListenerCallback = (newValue: any, oldvalue: any) => any;
+export interface ChangeHandler {
+    dataChanged: (path: string, newValue: any, oldValue: any) => any;
+    listen: (path: string, callback: ListenerCallback) => any;
 }
-export default ChangeHandler;
+export declare function createChangeHandler(): ChangeHandler;
+export declare function listen(data: any, callback: ListenerCallback): void;
+declare const _default: {
+    create: typeof createChangeHandler;
+    listen: typeof listen;
+};
+export default _default;

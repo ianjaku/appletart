@@ -5,20 +5,19 @@ import domObserver from './domObserver'
 import { plugin } from './plugins'
 import makeReactive from './makeReactive'
 
-type controller<State> = (state: context<State>) => any;
+type controller<ControllerState, GlobalState> = (state: context<ControllerState, GlobalState>) => any;
 type itemsMap = {[item: string]: HTMLElement}
-export type context<State> = {
-  state: State;
+export type context<ControllerState, GlobalState> = {
   items: itemsMap;
   on: createEventHandlersFunction;
   listen: (path: string, callback: listenerCallback) => any;
   controllerEl: HTMLElement;
-  plugin: (plugin: plugin<State>, data: any) => any;
+  extend: (plugin: plugin<ControllerState, GlobalState>, data: any) => any;
 };
 
-const _controllers: {[name: string]: controller<any>} = {}
+const _controllers: {[name: string]: controller<any, any>} = {}
 
-export function createController<State>(name: string, controller: controller<State>) {
+export function createController<ControllerState, GlobalState>(name: string, controller: controller<ControllerState, GlobalState>) {
   if (_controllers[name] != null) {
     throw Error(`Controller with name ${name} was defined twice.`);
   }
@@ -26,6 +25,8 @@ export function createController<State>(name: string, controller: controller<Sta
 }
 
 function init() {
+  const controllerState = makeReactive({});
+  
   const controllerElements = dom.findControllers()
 
   controllerElements.forEach(controllerEl => {
@@ -64,12 +65,11 @@ function init() {
     observer.observe(controllerEl)
 
     const context = {
-      state: store.getState(),
       items: itemsMap,
       on: eventHandler.createEventListeners,
       listen: store.addListener,
       controllerEl,
-      plugin: initPlugin
+      extend: initPlugin
     }
 
     controller(context)
@@ -78,7 +78,7 @@ function init() {
       eventHandler.registerElement(itemEl)
     }
 
-    function initPlugin(plugin: plugin<any>, params: any) {
+    function initPlugin(plugin: plugin<any, any>, params: any) {
       plugin(context, params)
     }
   })

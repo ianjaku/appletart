@@ -4,19 +4,19 @@ export type listenerCallback = (newValue: any, oldValue: any) => any;
 
 const _listeners: {[path: string]: listenerCallback[]} = {}
 
-let _state = makeReactive({}, onChangeHandler);
+let _globalState: any = null;
 
-export function createStore<State>(state: State) {
-  _state = makeReactive(state, onChangeHandler)
-
-  return {
-    state: _state,
-    listen: addListener
-  }
+export function createGlobalStore<State>(state: State) {
+  _globalState = makeReactive(state)
+  return _globalState
 }
 
-export function getState() {
-  return _state;
+export function createStore<State>(state: State) {
+  return makeReactive(state)
+}
+
+export function getGlobalState() {
+  return _globalState;
 }
 
 export function addListener(path: string, callback: listenerCallback) {
@@ -27,17 +27,8 @@ export function addListener(path: string, callback: listenerCallback) {
   }
 }
 
-function onChangeHandler(path: string, oldValue: string, newValue: string) {
-  const listeners = _listeners[path]
-  if (listeners == null || listeners.length === 0) return
-
-  for (let listener of listeners) {
-    listener(newValue, oldValue)
-  }
-}
-
 export default {
   createStore,
   addListener,
-  getState
+  getGlobalState
 }

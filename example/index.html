@@ -69,14 +69,28 @@
   
 
 
-  <div data-controller="search" data-on:clickOutside="clickOutside">
+  <!-- <div data-controller="search" data-on:clickOutside="clickOutside">
 
     <input type="text" placeholder="Search.." data-item data-on:input="updateResults">
 
     <ul class="results" data-item="results">
     </ul>
 
-  </div>
+  </div> -->
+
+  <form action="">
+
+    <div class="form-line">
+      <input type="text" data-item="project.firstname">
+      <div class="error" data-item="project.firstname.error">Something went wrong</div>
+    </div>
+
+    <div class="form-line">
+      <input type="text" data-item="project.email">
+      <div class="error" data-item="project.email.error">Something went wrong</div>
+    </div>
+
+  </form>
 
 
   

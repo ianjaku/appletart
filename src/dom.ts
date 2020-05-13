@@ -2,7 +2,6 @@
 type onActionCallback = (eventType: string, event: Event) => any;
 
 function runAfterDOMLoaded(callback: () => any) {
-  console.log("ReadyState:", document.readyState)
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       callback()

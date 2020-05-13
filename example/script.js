@@ -1,4 +1,42 @@
 
+
+// const store = appletart.createStore({
+//   value: "one"
+// })
+
+
+// appletart.listen(store.value, (newValue, oldValue) => {
+//   console.log(`Changed from ${oldValue} to ${newValue}`)
+// })
+
+const form = appletart.createPlugin(({ items }, { formName, onValidSubmit }) => {
+  
+})
+
+appletart.createController(({ state, extend, items, on }) => {
+  extend(form, {
+    formName: 'project',
+    onValidSubmit: (project) => createProject(project)
+  })
+
+  on({
+  })
+
+  function createProject(projectParams) {
+
+  }
+
+  // const state = {
+  //   email: ''
+  // }
+
+  // bind(items.input, state.email)
+})
+
+
+
+
+
 // console.log(appletart)
 
 // const store = new appletart.Store({
@@ -121,53 +159,55 @@
 
 // })()
 
-const { state } = appletart.createStore({
-  sidebarOpen: false
-})
+// const { state } = appletart.createStore({
+//   sidebarOpen: false
+// })
 
-function dropDown({ state, listen, on, items }, dropdownItemName) {
-}
+// function dropDown({ state, listen, on, items }, dropdownItemName) {
+// }
 
-const plugin = createPlugin(({ state, listen, on, items }, params) => {
+// const plugin = createPlugin(({ state, listen, on, items }, params) => {
 
-})
+// })
 
-const controller = appletart.createController("search", ({ state, listen, on, items, plugin }) => {
-  plugin(plugin, item)
+// const controller = appletart.createController("search", ({ state, listen, on, items, plugin }) => {
+//   plugin(plugin, item)
   
-  on({
-    updateResults: (event) => updateResults(event.target.value),
-    visitLink: (event) => visitLink(event.target.innerText),
-    clickOutside: (event) => hide()
-  })
+//   on({
+//     updateResults: (event) => updateResults(event.target.value),
+//     visitLink: (event) => visitLink(event.target.innerText),
+//     clickOutside: (event) => hide()
+//   })
 
-  function updateResults(value) {
-    const newResults = searchResults(value)
-    items.results.innerHTML = newResults.map((r, i) => `
-      <li data-item="result.${i}" data-on:click="visitLink">
-        ${r}
-      </li>
-    `).join("")
-    console.log(items)
-  }
+//   function updateResults(value) {
+//     const newResults = searchResults(value)
+//     items.results.innerHTML = newResults.map((r, i) => `
+//       <li data-item="result.${i}" data-on:click="visitLink">
+//         ${r}
+//       </li>
+//     `).join("")
+//     console.log(items)
+//   }
 
-  function visitLink(value) {
-    console.log("Visiting:", value)
-  }
+//   function visitLink(value) {
+//     console.log("Visiting:", value)
+//   }
 
-  function hide() {
-    console.log("Hidded")
-  }
-})
+//   function hide() {
+//     console.log("Hidded")
+//   }
+// })
 
-function searchResults(query) {
-  if (query.length >= 10) return []
-  let result = []
-  for (let i = 0; i < 10 - query.length; i++) {
-    result.push(`Result ${i}`)
-  }
-  return result
-}
+// function searchResults(query) {
+//   if (query.length >= 10) return []
+//   let result = []
+//   for (let i = 0; i < 10 - query.length; i++) {
+//     result.push(`Result ${i}`)
+//   }
+//   return result
+// }
+
+
 
 
 // const store = appletart.Store({

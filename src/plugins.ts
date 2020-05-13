@@ -1,8 +1,8 @@
 import { context } from './controller';
 
-export type plugin<State> = (controllerContext: context<State>, params: any) => any;
+export type plugin<ControllerState, GlobalState> = (controllerContext: context<ControllerState, GlobalState>, params: any) => any;
 
-function createPlugin<State>(pluginCallback: plugin<State>) {
+function createPlugin<ControllerState, GlobalState>(pluginCallback: plugin<ControllerState, GlobalState>) {
   return pluginCallback
 }
 
